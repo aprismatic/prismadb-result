@@ -7,9 +7,9 @@ namespace PrismaDB.Result
 {
     public class ResultTable
     {
-        private readonly List<ResultRow> _rows;
+        protected List<ResultRow> _rows;
 
-        public ResultColumnList Columns { get; }
+        public ResultColumnList Columns { get; protected set; }
 
         [XmlIgnore]
         public List<ResultRow> Rows => _rows;

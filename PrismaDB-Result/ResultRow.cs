@@ -7,13 +7,13 @@ namespace PrismaDB.Result
 {
     public class ResultRow : IEnumerable<object>
     {
-        private readonly ResultTable _table;
+        protected ResultTable _table;
 
-        internal List<object> Items { get; }
+        protected internal List<object> Items { get; protected set; }
 
         protected ResultRow() { }
 
-        internal ResultRow(ResultTable table)
+        protected internal ResultRow(ResultTable table)
         {
             _table = table;
             Items = new List<object>(_table.Columns.Headers.Count);
