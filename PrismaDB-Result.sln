@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultTests", "ResultTests\ResultTests.csproj", "{BB203AA0-D731-4406-9B13-70B2DE4FB89C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
