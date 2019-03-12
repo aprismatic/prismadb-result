@@ -22,10 +22,12 @@ namespace PrismaDB.Result
             _rows = new List<ResultRow>();
         }
 
-        public ResultTable(ResultQueryResponse other) : this(other.TableName)
+        public ResultTable(ResultReader reader) : this(reader.TableName)
         {
-            foreach (var row in other.rows)
-                _rows.Add(row);
+            while (reader.Read())
+            {
+                _rows.Add(reader.currentRow);
+            }
         }
 
         public override void Load(IDataReader reader)

@@ -70,7 +70,6 @@ namespace ResultTests
                 reader.EndWrite();
             }).Start();
 
-            var rowCount = 0;
             var results = new List<int[]>();
             var sw = new Stopwatch();
             sw.Start();
@@ -81,7 +80,6 @@ namespace ResultTests
                 row[1] = (int)reader[1];
                 row[2] = (int)reader[2];
                 results.Add(row);
-                rowCount++;
                 Assert.True(400 < sw.ElapsedMilliseconds);
                 Assert.True(600 > sw.ElapsedMilliseconds);
                 sw.Restart();
@@ -89,7 +87,65 @@ namespace ResultTests
             reader.Dispose();
 
             Assert.Equal(6, results[2][1]);
-            Assert.Equal(5, rowCount);
+            Assert.Equal(5, results.Count);
+        }
+
+        [Fact(DisplayName = "ResultReader to ResultTable")]
+        public void TestReaderToTable()
+        {
+            var reader = new ResultReader();
+            reader.Columns.Add("a");
+            reader.Columns.Add("b");
+            reader.Columns.Add("c");
+
+            new Task(() =>
+            {
+                for (var i = 0; i < 5; i++)
+                {
+                    Thread.Sleep(500);
+                    var row = reader.NewRow();
+                    row.Add(new object[] { (i + 1) * 1, (i + 1) * 2, (i + 1) * 3 });
+                    reader.Write(row);
+                }
+                reader.EndWrite();
+            }).Start();
+
+
+            var table = new ResultTable(reader);
+
+            Assert.Equal(6, table.Rows[2][1]);
+            Assert.Equal(5, table.Rows.Count);
+        }
+
+        [Fact(DisplayName = "ResultTable to ResultReader")]
+        public void TestTableToReader()
+        {
+            var table = new ResultTable();
+            table.Columns.Add("a");
+            table.Columns.Add("b");
+            table.Columns.Add("c");
+
+            for (var i = 0; i < 5; i++)
+            {
+                var row = table.NewRow();
+                row.Add(new object[] { (i + 1) * 1, (i + 1) * 2, (i + 1) * 3 });
+                table.Rows.Add(row);
+            }
+
+            var results = new List<int[]>();
+            using (var reader = new ResultReader(table))
+            {
+                while (reader.Read())
+                {
+                    var row = new int[3];
+                    row[0] = (int)reader[0];
+                    row[1] = (int)reader[1];
+                    row[2] = (int)reader[2];
+                    results.Add(row);
+                }
+            }
+            Assert.Equal(6, results[2][1]);
+            Assert.Equal(5, results.Count);
         }
     }
 }

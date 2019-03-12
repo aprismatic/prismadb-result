@@ -11,7 +11,7 @@ namespace PrismaDB.Result
     public class ResultReader : ResultQueryResponse, IDisposable
     {
         protected BlockingCollection<ResultRow> _rows;
-        private ResultRow _currentRow;
+        internal ResultRow currentRow;
         private bool _disposed = false;
 
         [XmlIgnore]
@@ -27,17 +27,21 @@ namespace PrismaDB.Result
             _rows = new BlockingCollection<ResultRow>();
         }
 
-        public ResultReader(ResultQueryResponse other) : this(other.TableName)
+        public ResultReader(ResultTable table) : this(table.TableName)
         {
-            foreach (var row in other.rows)
-                _rows.Add(row);
+            new Task(() =>
+            {
+                foreach (var row in table.rows)
+                    Write(row);
+                EndWrite();
+            }).Start();
         }
 
         public bool Read()
         {
             try
             {
-                _currentRow = _rows.Take();
+                currentRow = _rows.Take();
                 return true;
             }
             catch (InvalidOperationException)
@@ -48,23 +52,23 @@ namespace PrismaDB.Result
 
         public object Get(int index)
         {
-            return _currentRow[index];
+            return currentRow[index];
         }
 
         public object this[int index]
         {
-            get => _currentRow[index];
+            get => currentRow[index];
         }
 
         public object this[string columnName]
         {
-            get => _currentRow[Columns.Headers.IndexOf(
+            get => currentRow[Columns.Headers.IndexOf(
                 Columns.Headers.Single(x => x.ColumnName.Equals(columnName)))];
         }
 
         public object this[ResultColumnHeader header]
         {
-            get => _currentRow[Columns.Headers.IndexOf(header)];
+            get => currentRow[Columns.Headers.IndexOf(header)];
         }
 
         public void Write(ResultRow row)
