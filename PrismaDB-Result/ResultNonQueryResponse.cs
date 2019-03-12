@@ -11,6 +11,7 @@
             RowsAffected = rowsAffected;
             LastInsertId = lastInsertId;
             Warnings = warnings;
+            Tag = tag;
         }
 
         public enum CommandTag
