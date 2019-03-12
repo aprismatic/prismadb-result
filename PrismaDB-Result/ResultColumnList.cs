@@ -7,13 +7,13 @@ namespace PrismaDB.Result
 {
     public class ResultColumnList : IEnumerable<ResultColumnHeader>
     {
-        protected ResultTable _table;
+        protected ResultQueryResponse _table;
 
         public List<ResultColumnHeader> Headers { get; protected set; }
 
         protected ResultColumnList() { }
 
-        protected internal ResultColumnList(ResultTable table)
+        protected internal ResultColumnList(ResultQueryResponse table)
         {
             _table = table;
             Headers = new List<ResultColumnHeader>();
@@ -38,7 +38,7 @@ namespace PrismaDB.Result
 
         public void Add(ResultColumnHeader column)
         {
-            if (_table.Rows.Count > 0)
+            if (_table.rows.Any())
                 throw new ApplicationException("Table is not empty.");
             Headers.Add(column);
         }
@@ -65,7 +65,7 @@ namespace PrismaDB.Result
 
         public void Remove(int index)
         {
-            foreach (var row in _table.Rows)
+            foreach (var row in _table.rows)
                 row.Items.RemoveAt(index);
             Headers.RemoveAt(index);
         }
