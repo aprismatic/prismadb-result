@@ -4,14 +4,12 @@
     {
         public long LastInsertId { get; set; }
         public int Warnings { get; set; }
-        public string InfoMessage { get; set; }
 
-        public ResultNonQueryResponse()
+        public ResultNonQueryResponse(int rowsAffected = 0, long lastInsertId = 0, int warnings = 0) : base()
         {
-            RowsAffected = 0;
-            LastInsertId = 0;
-            Warnings = 0;
-            InfoMessage = "";
+            RowsAffected = rowsAffected;
+            LastInsertId = lastInsertId;
+            Warnings = warnings;
         }
     }
 }

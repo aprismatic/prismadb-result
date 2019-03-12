@@ -15,7 +15,7 @@ namespace PrismaDB.Result
 
         public ResultQueryResponse() : this("") { }
 
-        public ResultQueryResponse(string tableName)
+        public ResultQueryResponse(string tableName) : base()
         {
             Columns = new ResultColumnList(this);
             TableName = tableName;

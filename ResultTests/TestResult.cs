@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Xunit;
@@ -57,7 +58,7 @@ namespace ResultTests
             reader.Columns.Add("b");
             reader.Columns.Add("c");
 
-            new Thread(() =>
+            new Task(() =>
             {
                 for (var i = 0; i < 5; i++)
                 {

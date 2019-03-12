@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace PrismaDB.Result
@@ -96,15 +97,17 @@ namespace PrismaDB.Result
                 }
                 Columns.Add(resCol);
             }
-
-            while (reader.Read())
+            new Task(() =>
             {
-                var resRow = NewRow();
-                for (var i = 0; i < Columns.Count; i++)
-                    resRow.Add(reader.GetValue(i));
-                _rows.Add(resRow);
-            }
-            _rows.CompleteAdding();
+                while (reader.Read())
+                {
+                    var resRow = NewRow();
+                    for (var i = 0; i < Columns.Count; i++)
+                        resRow.Add(reader.GetValue(i));
+                    _rows.Add(resRow);
+                }
+                _rows.CompleteAdding();
+            }).Start();
         }
 
         public void Dispose()

@@ -1,14 +1,15 @@
 ﻿namespace PrismaDB.Result
 {
-    public class ResultErrorResponse : ResultResponse
+    public class ResultErrorResponse : ResultNonQueryResponse
     {
         public int ErrorCode { get; set; }
         public string ErrorMessage { get; set; }
 
-        public ResultErrorResponse()
+        public ResultErrorResponse(string errorMessage = "", string sqlState = "HY000", int errorCode = 0) : base()
         {
-            ErrorCode = 0;
-            ErrorMessage = "";
+            ErrorCode = errorCode;
+            ErrorMessage = errorMessage;
+            SqlState = sqlState;
         }
     }
 }
