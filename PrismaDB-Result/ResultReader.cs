@@ -27,8 +27,10 @@ namespace PrismaDB.Result
             _rows = new BlockingCollection<ResultRow>();
         }
 
-        public ResultReader(ResultTable table) : this(table.TableName)
+        public ResultReader(ResultTable table) : base(table)
         {
+            _rows = new BlockingCollection<ResultRow>();
+
             new Task(() =>
             {
                 foreach (var row in table.rows)

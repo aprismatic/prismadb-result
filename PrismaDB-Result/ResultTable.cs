@@ -22,8 +22,10 @@ namespace PrismaDB.Result
             _rows = new List<ResultRow>();
         }
 
-        public ResultTable(ResultReader reader) : this(reader.TableName)
+        public ResultTable(ResultReader reader) : base(reader)
         {
+            _rows = new List<ResultRow>();
+
             while (reader.Read())
                 _rows.Add(NewRow(reader.currentRow));
         }

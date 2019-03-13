@@ -21,6 +21,12 @@ namespace PrismaDB.Result
             TableName = tableName;
         }
 
+        public ResultQueryResponse(ResultQueryResponse other) : this(other.TableName)
+        {
+            foreach (var column in other.Columns)
+                Columns.Add(column);
+        }
+
         public ResultRow NewRow()
         {
             return new ResultRow(this);
