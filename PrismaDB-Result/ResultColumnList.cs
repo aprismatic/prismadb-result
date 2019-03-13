@@ -19,7 +19,7 @@ namespace PrismaDB.Result
             Headers = new List<ResultColumnHeader>();
         }
 
-        public int Count => this.Count();
+        public int Count => Headers.Count;
 
         public ResultColumnHeader this[int index] => Headers[index];
 

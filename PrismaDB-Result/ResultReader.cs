@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace PrismaDB.Result
 {
-    public class ResultReader : ResultQueryResponse, IDisposable
+    public class ResultReader : ResultQueryResponse, IDataReader, IDisposable
     {
         protected BlockingCollection<ResultRow> _rows;
         internal ResultRow currentRow;
@@ -16,6 +16,14 @@ namespace PrismaDB.Result
 
         [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
+
+        public int FieldCount => currentRow.Count;
+
+        public int Depth => throw new NotImplementedException();
+
+        public bool IsClosed => _rows.IsAddingCompleted;
+
+        public int RecordsAffected => RowsAffected;
 
         //[XmlIgnore]
         //private BlockingCollection<ResultRow> Rows => _rows;
@@ -35,7 +43,7 @@ namespace PrismaDB.Result
             {
                 foreach (var row in table.rows)
                     Write(NewRow(row));
-                EndWrite();
+                Close();
             }).Start();
         }
 
@@ -50,11 +58,6 @@ namespace PrismaDB.Result
             {
                 return false;
             }
-        }
-
-        public object Get(int index)
-        {
-            return currentRow[index];
         }
 
         public object this[int index]
@@ -78,7 +81,7 @@ namespace PrismaDB.Result
             _rows.Add(row);
         }
 
-        public void EndWrite()
+        public void Close()
         {
             _rows.CompleteAdding();
         }
@@ -134,6 +137,129 @@ namespace PrismaDB.Result
             }
 
             _disposed = true;
+        }
+
+        public DataTable GetSchemaTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool NextResult()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool GetBoolean(int i)
+        {
+            return (bool)currentRow[i];
+        }
+
+        public byte GetByte(int i)
+        {
+            return (byte)currentRow[i];
+        }
+
+        public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
+        public char GetChar(int i)
+        {
+            return (char)currentRow[i];
+        }
+
+        public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IDataReader GetData(int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDataTypeName(int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DateTime GetDateTime(int i)
+        {
+            return (DateTime)currentRow[i];
+        }
+
+        public decimal GetDecimal(int i)
+        {
+            return (decimal)currentRow[i];
+        }
+
+        public double GetDouble(int i)
+        {
+            return (double)currentRow[i];
+        }
+
+        public Type GetFieldType(int i)
+        {
+            return Columns[i].DataType;
+        }
+
+        public float GetFloat(int i)
+        {
+            return (float)currentRow[i];
+        }
+
+        public Guid GetGuid(int i)
+        {
+            return (Guid)currentRow[i];
+        }
+
+        public short GetInt16(int i)
+        {
+            return (short)currentRow[i];
+        }
+
+        public int GetInt32(int i)
+        {
+            return (int)currentRow[i];
+        }
+
+        public long GetInt64(int i)
+        {
+            return (long)currentRow[i];
+        }
+
+        public string GetName(int i)
+        {
+            return Columns[i].ColumnName;
+        }
+
+        public int GetOrdinal(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetString(int i)
+        {
+            return (string)currentRow[i];
+        }
+
+        public object GetValue(int i)
+        {
+            return currentRow[i];
+        }
+
+        public int GetValues(object[] values)
+        {
+            values = new object[currentRow.Count];
+            for (var i = 0; i < values.Length; i++)
+                values[i] = currentRow[i];
+            return values.Length;
+        }
+
+        public bool IsDBNull(int i)
+        {
+            return currentRow[i] is DBNull;
         }
     }
 }
