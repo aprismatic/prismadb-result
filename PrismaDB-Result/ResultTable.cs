@@ -5,50 +5,58 @@ using System.Xml.Serialization;
 
 namespace PrismaDB.Result
 {
-    public class ResultTable
+    public class ResultTable : ResultQueryResponse
     {
         protected List<ResultRow> _rows;
 
-        public ResultColumnList Columns { get; protected set; }
+        [XmlIgnore]
+        internal override IEnumerable<ResultRow> rows => _rows;
 
         [XmlIgnore]
         public List<ResultRow> Rows => _rows;
 
-        public string TableName { get; set; }
+        public ResultTable() : this("") { }
 
-        public ResultTable()
+        public ResultTable(string tableName) : base(tableName)
         {
-            Columns = new ResultColumnList(this);
             _rows = new List<ResultRow>();
         }
 
-        public ResultTable(string tableName) : this()
+        public ResultTable(ResultReader reader) : this(reader.TableName)
         {
-            TableName = tableName;
-        }
-
-        public ResultRow NewRow()
-        {
-            return new ResultRow(this);
-        }
-
-        public void Load(IDataReader reader)
-        {
-            if (Rows.Count > 0 || Columns.Count > 0)
-                throw new ApplicationException("ResultTable is not empty.");
-
-            // TODO: Change to GetSchemaTable(), probably better performance
-            var dataTable = new DataTable();
-            dataTable.Load(reader);
-
-            foreach (DataColumn column in dataTable.Columns)
-                Columns.Add(column.ColumnName, column.DataType, column.MaxLength);
-
-            foreach (DataRow row in dataTable.Rows)
+            while (reader.Read())
             {
-                var resRow = this.NewRow();
-                resRow.Add(row.ItemArray);
-                Rows.Add(resRow);
+                _rows.Add(reader.currentRow);
+            }
+        }
+
+        public override void Load(IDataReader reader)
+        {
+            if (Columns.Count > 0)
+                throw new ApplicationException("ResultReader is not empty.");
+
+            var schemaTable = reader.GetSchemaTable();
+            foreach (DataRow row in reader.GetSchemaTable().Rows)
+            {
+                var resCol = new ResultColumnHeader();
+                foreach (DataColumn col in schemaTable.Columns)
+                {
+                    if (col.ColumnName == "ColumnName")
+                        resCol.ColumnName = (string)row[col.Ordinal];
+                    if (col.ColumnName == "ColumnSize")
+                        resCol.MaxLength = (int)row[col.Ordinal];
+                    if (col.ColumnName == "DataType")
+                        resCol.DataType = (Type)row[col.Ordinal];
+                }
+                Columns.Add(resCol);
+            }
+
+            while (reader.Read())
+            {
+                var resRow = NewRow();
+                for (var i = 0; i < Columns.Count; i++)
+                    resRow.Add(reader.GetValue(i));
+                _rows.Add(resRow);
             }
         }
     }
