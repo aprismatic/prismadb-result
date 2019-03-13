@@ -110,7 +110,6 @@ namespace ResultTests
                 reader.EndWrite();
             }).Start();
 
-
             var table = new ResultTable(reader);
 
             Assert.Equal(6, table.Rows[2][1]);
@@ -144,6 +143,7 @@ namespace ResultTests
                     results.Add(row);
                 }
             }
+
             Assert.Equal(6, results[2][1]);
             Assert.Equal(5, results.Count);
         }

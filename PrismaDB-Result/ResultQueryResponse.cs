@@ -26,6 +26,11 @@ namespace PrismaDB.Result
             return new ResultRow(this);
         }
 
+        public ResultRow NewRow(ResultRow other)
+        {
+            return new ResultRow(this, other);
+        }
+
         public abstract void Load(IDataReader reader);
     }
 }

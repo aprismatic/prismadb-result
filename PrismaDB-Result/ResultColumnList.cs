@@ -65,6 +65,8 @@ namespace PrismaDB.Result
 
         public void Remove(int index)
         {
+            if (_table is ResultReader)
+                throw new NotSupportedException("Cannot remove columns from ResultReader");
             foreach (var row in _table.rows)
                 row.Items.RemoveAt(index);
             Headers.RemoveAt(index);

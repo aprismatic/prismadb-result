@@ -25,9 +25,7 @@ namespace PrismaDB.Result
         public ResultTable(ResultReader reader) : this(reader.TableName)
         {
             while (reader.Read())
-            {
-                _rows.Add(reader.currentRow);
-            }
+                _rows.Add(NewRow(reader.currentRow));
         }
 
         public override void Load(IDataReader reader)

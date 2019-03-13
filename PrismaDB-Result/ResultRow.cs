@@ -19,6 +19,12 @@ namespace PrismaDB.Result
             Items = new List<object>(_table.Columns.Headers.Count);
         }
 
+        protected internal ResultRow(ResultQueryResponse table, ResultRow other) : this(table)
+        {
+            foreach (var item in other)
+                Items.Add(item);
+        }
+
         public int Count => this.Count();
 
         public object this[int index]

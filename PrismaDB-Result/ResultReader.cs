@@ -32,7 +32,7 @@ namespace PrismaDB.Result
             new Task(() =>
             {
                 foreach (var row in table.rows)
-                    Write(row);
+                    Write(NewRow(row));
                 EndWrite();
             }).Start();
         }
