@@ -13,16 +13,16 @@
             Warnings = warnings;
             Tag = tag;
         }
+    }
 
-        public enum CommandTag
-        {
-            INSERT,
-            DELETE,
-            UPDATE,
-            SELECT,
-            MOVE,
-            FETCH,
-            COPY
-        }
+    public enum CommandTag
+    {
+        INSERT,
+        DELETE,
+        UPDATE,
+        SELECT,
+        MOVE,
+        FETCH,
+        COPY
     }
 }
