@@ -25,7 +25,7 @@ namespace PrismaDB.Result
                 Items.Add(item);
         }
 
-        public int Count => this.Count();
+        public int Count => Items.Count;
 
         public object this[int index]
         {

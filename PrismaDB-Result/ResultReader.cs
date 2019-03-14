@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace PrismaDB.Result
 {
-    public class ResultReader : ResultQueryResponse, IDisposable
+    public class ResultReader : ResultQueryResponse, IDataReader, IDisposable
     {
         protected BlockingCollection<ResultRow> _rows;
         internal ResultRow currentRow;
@@ -17,8 +17,13 @@ namespace PrismaDB.Result
         [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
 
-        //[XmlIgnore]
-        //private BlockingCollection<ResultRow> Rows => _rows;
+        public int FieldCount => currentRow.Count;
+
+        public int Depth => 0;
+
+        public bool IsClosed => _rows.IsAddingCompleted;
+
+        public int RecordsAffected => RowsAffected;
 
         public ResultReader() : this("") { }
 
@@ -35,7 +40,7 @@ namespace PrismaDB.Result
             {
                 foreach (var row in table.rows)
                     Write(NewRow(row));
-                EndWrite();
+                _rows.CompleteAdding();
             }).Start();
         }
 
@@ -52,11 +57,6 @@ namespace PrismaDB.Result
             }
         }
 
-        public object Get(int index)
-        {
-            return currentRow[index];
-        }
-
         public object this[int index]
         {
             get => currentRow[index];
@@ -64,8 +64,7 @@ namespace PrismaDB.Result
 
         public object this[string columnName]
         {
-            get => currentRow[Columns.Headers.IndexOf(
-                Columns.Headers.Single(x => x.ColumnName.Equals(columnName)))];
+            get => currentRow[GetOrdinal(columnName)];
         }
 
         public object this[ResultColumnHeader header]
@@ -78,7 +77,7 @@ namespace PrismaDB.Result
             _rows.Add(row);
         }
 
-        public void EndWrite()
+        public void Close()
         {
             _rows.CompleteAdding();
         }
@@ -134,6 +133,139 @@ namespace PrismaDB.Result
             }
 
             _disposed = true;
+        }
+
+        public DataTable GetSchemaTable()
+        {
+            throw new NotSupportedException();
+        }
+
+        public bool NextResult()
+        {
+            throw new NotSupportedException();
+        }
+
+        public bool GetBoolean(int i)
+        {
+            return (bool)currentRow[i];
+        }
+
+        public byte GetByte(int i)
+        {
+            return (byte)currentRow[i];
+        }
+
+        public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
+        {
+            var bytes = (byte[])currentRow[i];
+            var sourceMaxLen = bytes.Length - fieldOffset;
+            var destMaxLen = buffer.Length - bufferoffset;
+            var actualLen = Math.Min(Math.Min(sourceMaxLen, destMaxLen), length);
+            Array.Copy(bytes, fieldOffset, buffer, bufferoffset, actualLen);
+            return actualLen;
+        }
+
+        public char GetChar(int i)
+        {
+            return (char)currentRow[i];
+        }
+
+        public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
+        {
+            var chars = (char[])currentRow[i];
+            var sourceMaxLen = chars.Length - fieldoffset;
+            var destMaxLen = buffer.Length - bufferoffset;
+            var actualLen = Math.Min(Math.Min(sourceMaxLen, destMaxLen), length);
+            Array.Copy(chars, fieldoffset, buffer, bufferoffset, actualLen);
+            return actualLen;
+        }
+
+        public IDataReader GetData(int i)
+        {
+            throw new NotSupportedException();
+        }
+
+        public string GetDataTypeName(int i)
+        {
+            return GetFieldType(i).ToString();
+        }
+
+        public DateTime GetDateTime(int i)
+        {
+            return (DateTime)currentRow[i];
+        }
+
+        public decimal GetDecimal(int i)
+        {
+            return (decimal)currentRow[i];
+        }
+
+        public double GetDouble(int i)
+        {
+            return (double)currentRow[i];
+        }
+
+        public Type GetFieldType(int i)
+        {
+            return Columns[i].DataType;
+        }
+
+        public float GetFloat(int i)
+        {
+            return (float)currentRow[i];
+        }
+
+        public Guid GetGuid(int i)
+        {
+            return (Guid)currentRow[i];
+        }
+
+        public short GetInt16(int i)
+        {
+            return (short)currentRow[i];
+        }
+
+        public int GetInt32(int i)
+        {
+            return (int)currentRow[i];
+        }
+
+        public long GetInt64(int i)
+        {
+            return (long)currentRow[i];
+        }
+
+        public string GetName(int i)
+        {
+            return Columns[i].ColumnName;
+        }
+
+        public int GetOrdinal(string name)
+        {
+            return Columns.Headers.IndexOf(Columns.Headers.Single(x => x.ColumnName.Equals(name)));
+        }
+
+        public string GetString(int i)
+        {
+            return (string)currentRow[i];
+        }
+
+        public object GetValue(int i)
+        {
+            return currentRow[i];
+        }
+
+        public int GetValues(object[] values)
+        {
+            values = new object[currentRow.Count];
+            for (var i = 0; i < values.Length; i++)
+                values[i] = currentRow[i];
+            return values.Length;
+        }
+
+        public bool IsDBNull(int i)
+        {
+            return currentRow[i] is DBNull;
         }
     }
 }

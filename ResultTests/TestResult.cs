@@ -67,7 +67,7 @@ namespace ResultTests
                     row.Add(new object[] { (i + 1) * 1, (i + 1) * 2, (i + 1) * 3 });
                     reader.Write(row);
                 }
-                reader.EndWrite();
+                reader.Close();
             }).Start();
 
             var results = new List<int[]>();
@@ -107,7 +107,7 @@ namespace ResultTests
                     row.Add(new object[] { (i + 1) * 1, (i + 1) * 2, (i + 1) * 3 });
                     reader.Write(row);
                 }
-                reader.EndWrite();
+                reader.Close();
             }).Start();
 
             var table = new ResultTable(reader);
