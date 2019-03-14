@@ -257,10 +257,10 @@ namespace PrismaDB.Result
 
         public int GetValues(object[] values)
         {
-            values = new object[currentRow.Count];
-            for (var i = 0; i < values.Length; i++)
+            var maxLen = Math.Min(currentRow.Count, values.Length);
+            for (var i = 0; i < maxLen; i++)
                 values[i] = currentRow[i];
-            return values.Length;
+            return maxLen;
         }
 
         public bool IsDBNull(int i)
