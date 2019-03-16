@@ -11,13 +11,14 @@ namespace PrismaDB.Result
     public class ResultReader : ResultQueryResponse, IDataReader, IDisposable
     {
         protected BlockingCollection<ResultRow> _rows;
-        internal ResultRow currentRow;
         private bool _disposed = false;
 
         [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
 
-        public int FieldCount => currentRow.Count;
+        public int FieldCount => CurrentRow.Count;
+
+        public ResultRow CurrentRow { get; private set; }
 
         public int Depth => 0;
 
@@ -48,7 +49,7 @@ namespace PrismaDB.Result
         {
             try
             {
-                currentRow = _rows.Take();
+                CurrentRow = _rows.Take();
                 return true;
             }
             catch (InvalidOperationException)
@@ -59,17 +60,17 @@ namespace PrismaDB.Result
 
         public object this[int index]
         {
-            get => currentRow[index];
+            get => CurrentRow[index];
         }
 
         public object this[string columnName]
         {
-            get => currentRow[GetOrdinal(columnName)];
+            get => CurrentRow[GetOrdinal(columnName)];
         }
 
         public object this[ResultColumnHeader header]
         {
-            get => currentRow[Columns.Headers.IndexOf(header)];
+            get => CurrentRow[Columns.Headers.IndexOf(header)];
         }
 
         public void Write(ResultRow row)
@@ -147,17 +148,17 @@ namespace PrismaDB.Result
 
         public bool GetBoolean(int i)
         {
-            return (bool)currentRow[i];
+            return (bool)CurrentRow[i];
         }
 
         public byte GetByte(int i)
         {
-            return (byte)currentRow[i];
+            return (byte)CurrentRow[i];
         }
 
         public long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
-            var bytes = (byte[])currentRow[i];
+            var bytes = (byte[])CurrentRow[i];
             var sourceMaxLen = bytes.Length - fieldOffset;
             var destMaxLen = buffer.Length - bufferoffset;
             var actualLen = Math.Min(Math.Min(sourceMaxLen, destMaxLen), length);
@@ -167,12 +168,12 @@ namespace PrismaDB.Result
 
         public char GetChar(int i)
         {
-            return (char)currentRow[i];
+            return (char)CurrentRow[i];
         }
 
         public long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
-            var chars = (char[])currentRow[i];
+            var chars = (char[])CurrentRow[i];
             var sourceMaxLen = chars.Length - fieldoffset;
             var destMaxLen = buffer.Length - bufferoffset;
             var actualLen = Math.Min(Math.Min(sourceMaxLen, destMaxLen), length);
@@ -192,17 +193,17 @@ namespace PrismaDB.Result
 
         public DateTime GetDateTime(int i)
         {
-            return (DateTime)currentRow[i];
+            return (DateTime)CurrentRow[i];
         }
 
         public decimal GetDecimal(int i)
         {
-            return (decimal)currentRow[i];
+            return (decimal)CurrentRow[i];
         }
 
         public double GetDouble(int i)
         {
-            return (double)currentRow[i];
+            return (double)CurrentRow[i];
         }
 
         public Type GetFieldType(int i)
@@ -212,27 +213,27 @@ namespace PrismaDB.Result
 
         public float GetFloat(int i)
         {
-            return (float)currentRow[i];
+            return (float)CurrentRow[i];
         }
 
         public Guid GetGuid(int i)
         {
-            return (Guid)currentRow[i];
+            return (Guid)CurrentRow[i];
         }
 
         public short GetInt16(int i)
         {
-            return (short)currentRow[i];
+            return (short)CurrentRow[i];
         }
 
         public int GetInt32(int i)
         {
-            return (int)currentRow[i];
+            return (int)CurrentRow[i];
         }
 
         public long GetInt64(int i)
         {
-            return (long)currentRow[i];
+            return (long)CurrentRow[i];
         }
 
         public string GetName(int i)
@@ -247,25 +248,25 @@ namespace PrismaDB.Result
 
         public string GetString(int i)
         {
-            return (string)currentRow[i];
+            return (string)CurrentRow[i];
         }
 
         public object GetValue(int i)
         {
-            return currentRow[i];
+            return CurrentRow[i];
         }
 
         public int GetValues(object[] values)
         {
-            var maxLen = Math.Min(currentRow.Count, values.Length);
+            var maxLen = Math.Min(CurrentRow.Count, values.Length);
             for (var i = 0; i < maxLen; i++)
-                values[i] = currentRow[i];
+                values[i] = CurrentRow[i];
             return maxLen;
         }
 
         public bool IsDBNull(int i)
         {
-            return currentRow[i] is DBNull;
+            return CurrentRow[i] is DBNull;
         }
     }
 }

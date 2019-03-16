@@ -27,7 +27,7 @@ namespace PrismaDB.Result
             _rows = new List<ResultRow>();
 
             while (reader.Read())
-                _rows.Add(NewRow(reader.currentRow));
+                _rows.Add(NewRow(reader.CurrentRow));
         }
 
         public override void Load(IDataReader reader)
