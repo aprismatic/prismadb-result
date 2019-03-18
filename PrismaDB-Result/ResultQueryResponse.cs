@@ -23,6 +23,7 @@ namespace PrismaDB.Result
 
         public ResultQueryResponse(ResultQueryResponse other) : this(other.TableName)
         {
+            RowsAffected = other.RowsAffected;
             foreach (var column in other.Columns)
                 Columns.Add(column);
         }

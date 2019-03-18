@@ -58,7 +58,7 @@ namespace ResultTests
             reader.Columns.Add("b");
             reader.Columns.Add("c");
 
-            new Task(() =>
+            Task.Run(() =>
             {
                 for (var i = 0; i < 5; i++)
                 {
@@ -68,7 +68,7 @@ namespace ResultTests
                     reader.Write(row);
                 }
                 reader.Close();
-            }).Start();
+            });
 
             var results = new List<int[]>();
             var sw = new Stopwatch();
@@ -98,7 +98,7 @@ namespace ResultTests
             reader.Columns.Add("b");
             reader.Columns.Add("c");
 
-            new Task(() =>
+            Task.Run(() =>
             {
                 for (var i = 0; i < 5; i++)
                 {
@@ -108,7 +108,7 @@ namespace ResultTests
                     reader.Write(row);
                 }
                 reader.Close();
-            }).Start();
+            });
 
             var table = new ResultTable(reader);
 

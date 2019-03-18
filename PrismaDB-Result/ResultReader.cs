@@ -12,6 +12,7 @@ namespace PrismaDB.Result
     {
         protected BlockingCollection<ResultRow> _rows;
         private bool _disposed = false;
+        private Exception _exception;
 
         [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
@@ -37,12 +38,22 @@ namespace PrismaDB.Result
         {
             _rows = new BlockingCollection<ResultRow>();
 
-            new Task(() =>
+            Task.Run(() =>
             {
-                foreach (var row in table.rows)
-                    Write(NewRow(row));
-                _rows.CompleteAdding();
-            }).Start();
+                try
+                {
+                    foreach (var row in table.rows)
+                        _rows.Add(NewRow(row));
+                }
+                catch (Exception ex)
+                {
+                    _exception = ex;
+                }
+                finally
+                {
+                    _rows.CompleteAdding();
+                }
+            });
         }
 
         public bool Read()
@@ -54,6 +65,8 @@ namespace PrismaDB.Result
             }
             catch (InvalidOperationException)
             {
+                if (_exception != null)
+                    throw _exception;
                 return false;
             }
         }
@@ -99,21 +112,39 @@ namespace PrismaDB.Result
                     if (col.ColumnName == "ColumnSize")
                         resCol.MaxLength = (int)row[col.Ordinal];
                     if (col.ColumnName == "DataType")
-                        resCol.DataType = (Type)row[col.Ordinal];
+                    {
+                        if (row[col.Ordinal] is DBNull)
+                            resCol.DataType = typeof(DBNull);
+                        else
+                            resCol.DataType = (Type)row[col.Ordinal];
+                    }
                 }
                 Columns.Add(resCol);
             }
-            new Task(() =>
+
+            RowsAffected = reader.RecordsAffected;
+
+            Task.Run(() =>
             {
-                while (reader.Read())
+                try
                 {
-                    var resRow = NewRow();
-                    for (var i = 0; i < Columns.Count; i++)
-                        resRow.Add(reader.GetValue(i));
-                    _rows.Add(resRow);
+                    while (reader.Read())
+                    {
+                        var resRow = NewRow();
+                        for (var i = 0; i < Columns.Count; i++)
+                            resRow.Add(reader.GetValue(i));
+                        _rows.Add(resRow);
+                    }
                 }
-                _rows.CompleteAdding();
-            }).Start();
+                catch (Exception ex)
+                {
+                    _exception = ex;
+                }
+                finally
+                {
+                    _rows.CompleteAdding();
+                }
+            });
         }
 
         public void Dispose()

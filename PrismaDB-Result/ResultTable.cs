@@ -46,10 +46,17 @@ namespace PrismaDB.Result
                     if (col.ColumnName == "ColumnSize")
                         resCol.MaxLength = (int)row[col.Ordinal];
                     if (col.ColumnName == "DataType")
-                        resCol.DataType = (Type)row[col.Ordinal];
+                    {
+                        if (row[col.Ordinal] is DBNull)
+                            resCol.DataType = typeof(DBNull);
+                        else
+                            resCol.DataType = (Type)row[col.Ordinal];
+                    }
                 }
                 Columns.Add(resCol);
             }
+
+            RowsAffected = reader.RecordsAffected;
 
             while (reader.Read())
             {
