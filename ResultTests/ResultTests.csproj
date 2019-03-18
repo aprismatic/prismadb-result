@@ -29,7 +29,7 @@
     <None Update="kill-MySQL.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="kill-PostgreSQL.ps1">
+    <None Update="kill-Postgres.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="prepare-MSSQL.ps1">
@@ -38,7 +38,7 @@
     <None Update="prepare-MySQL.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="prepare-PostgreSQL.ps1">
+    <None Update="prepare-Postgres.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

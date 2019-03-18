@@ -1,5 +1,5 @@
 param(
-    [string]$ContainerName = 'UnitTestPostgreSQLServer'
+    [string]$ContainerName = 'UnitTestPostgresServer'
 )
 
 "Stopping & removing containers named '$ContainerName'..."

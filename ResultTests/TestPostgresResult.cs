@@ -6,12 +6,12 @@ using Xunit;
 
 namespace ResultTests
 {
-    [Collection("PostgreSQL Database Collection")]
-    public class TestPostgreSqlResult : IDisposable
+    [Collection("Postgres Database Collection")]
+    public class TestPostgresResult : IDisposable
     {
         private NpgsqlConnection dbConn;
 
-        public TestPostgreSqlResult(PostgreSqlDatabaseFixture fixture)
+        public TestPostgresResult(PostgresDatabaseFixture fixture)
         {
             dbConn = fixture.DbConn;
 

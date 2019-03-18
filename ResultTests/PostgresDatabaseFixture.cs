@@ -6,13 +6,13 @@ using Xunit;
 
 namespace ResultTests
 {
-    public class PostgreSqlDatabaseFixture : IDisposable
+    public class PostgresDatabaseFixture : IDisposable
     {
-        public static string ContainerName = "UnitTestPostgreSQLServer";
+        public static string ContainerName = "UnitTestPostgresServer";
         public NpgsqlConnection DbConn { get; private set; }
         private static int port = 5432;
 
-        public PostgreSqlDatabaseFixture()
+        public PostgresDatabaseFixture()
         {
             {
                 var proc = new Process
@@ -20,7 +20,7 @@ namespace ResultTests
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "powershell",
-                        Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"./prepare-PostgreSQL.ps1\" -ContainerName \"{ContainerName}\" -Port {port}",
+                        Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"./prepare-Postgres.ps1\" -ContainerName \"{ContainerName}\" -Port {port}",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
                         CreateNoWindow = true
@@ -84,7 +84,7 @@ namespace ResultTests
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = "powershell",
-                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"./kill-PostgreSQL.ps1\" \"{ContainerName}\"",
+                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"./kill-Postgres.ps1\" \"{ContainerName}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     CreateNoWindow = true
@@ -99,8 +99,8 @@ namespace ResultTests
         }
     }
 
-    [CollectionDefinition("PostgreSQL Database Collection")]
-    public class PostgreSqlDatabaseCollection : ICollectionFixture<PostgreSqlDatabaseFixture>
+    [CollectionDefinition("Postgres Database Collection")]
+    public class PostgresDatabaseCollection : ICollectionFixture<PostgresDatabaseFixture>
     {
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the
