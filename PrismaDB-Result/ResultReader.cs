@@ -12,7 +12,7 @@ namespace PrismaDB.Result
     {
         protected BlockingCollection<ResultRow> _rows;
         private bool _disposed = false;
-        private Exception _exception;
+        protected Exception _exception;
 
         [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
@@ -124,27 +124,14 @@ namespace PrismaDB.Result
 
             RowsAffected = reader.RecordsAffected;
 
-            Task.Run(() =>
+            while (reader.Read())
             {
-                try
-                {
-                    while (reader.Read())
-                    {
-                        var resRow = NewRow();
-                        for (var i = 0; i < Columns.Count; i++)
-                            resRow.Add(reader.GetValue(i));
-                        _rows.Add(resRow);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _exception = ex;
-                }
-                finally
-                {
-                    _rows.CompleteAdding();
-                }
-            });
+                var resRow = NewRow();
+                for (var i = 0; i < Columns.Count; i++)
+                    resRow.Add(reader.GetValue(i));
+                _rows.Add(resRow);
+            }
+            _rows.CompleteAdding();
         }
 
         public void Dispose()
