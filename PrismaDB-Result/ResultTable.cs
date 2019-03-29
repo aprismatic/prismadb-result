@@ -66,5 +66,10 @@ namespace PrismaDB.Result
                 _rows.Add(resRow);
             }
         }
+
+        public override string ToString()
+        {
+            return ResultTablePrinter.GetDataInTableFormat(this);
+        }
     }
 }
