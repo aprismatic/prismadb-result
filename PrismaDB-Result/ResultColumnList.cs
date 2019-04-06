@@ -39,7 +39,7 @@ namespace PrismaDB.Result
         public void Add(ResultColumnHeader column)
         {
             if (_table.rows != null && _table.rows.Any())
-                throw new ApplicationException("Table is not empty.");
+                throw new InvalidOperationException("Table is not empty.");
             Headers.Add(column);
         }
 

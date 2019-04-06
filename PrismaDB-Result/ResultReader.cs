@@ -99,7 +99,7 @@ namespace PrismaDB.Result
         public override void Load(IDataReader reader)
         {
             if (Columns.Count > 0)
-                throw new ApplicationException("ResultReader is not empty.");
+                throw new InvalidOperationException("ResultReader is not empty.");
 
             var schemaTable = reader.GetSchemaTable();
             foreach (DataRow row in reader.GetSchemaTable().Rows)

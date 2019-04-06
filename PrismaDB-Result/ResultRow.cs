@@ -34,7 +34,7 @@ namespace PrismaDB.Result
             set
             {
                 if (index > _table.Columns.Headers.Count - 1)
-                    throw new ApplicationException("Index is out of the range of columns in table.");
+                    throw new IndexOutOfRangeException("Index is out of the range of columns in table.");
                 Items[index] = value;
             }
         }
@@ -75,7 +75,7 @@ namespace PrismaDB.Result
         public void Add(object value)
         {
             if (Items.Count >= _table.Columns.Headers.Count)
-                throw new ApplicationException("Items in row has reached the number of columns in table.");
+                throw new InvalidOperationException("Items in row has reached the number of columns in table.");
             Items.Add(value);
         }
 
