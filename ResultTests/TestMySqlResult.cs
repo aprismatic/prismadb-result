@@ -69,7 +69,10 @@ namespace ResultTests
             var selectSql = @"SELECT * FROM TT ;";
             using (var cmd = new MySqlCommand(selectSql, dbConn))
             {
-                reader.Load(cmd.ExecuteReader());
+                using (var dbReader = cmd.ExecuteReader())
+                {
+                    reader.Load(dbReader);
+                }
             }
 
             Assert.Equal("a", reader.Columns[0].ColumnName);
@@ -93,9 +96,36 @@ namespace ResultTests
             }
             reader.Dispose();
 
-
             Assert.Equal("data", results[2][1]);
             Assert.Equal(4, results.Count);
+        }
+
+        [Fact(DisplayName = "ResultTable Load")]
+        public void TestResultTableLoad()
+        {
+            var table = new ResultTable();
+
+            var selectSql = @"SELECT * FROM TT ;";
+            using (var cmd = new MySqlCommand(selectSql, dbConn))
+            {
+                using (var dbReader = cmd.ExecuteReader())
+                {
+                    table.Load(dbReader);
+                }
+            }
+
+            Assert.Equal("a", table.Columns[0].ColumnName);
+            Assert.Equal("b", table.Columns[1].ColumnName);
+            Assert.Equal("c", table.Columns[2].ColumnName);
+
+            Assert.Equal(typeof(int), table.Columns[0].DataType);
+            Assert.Equal(typeof(string), table.Columns[1].DataType);
+            Assert.Equal(typeof(double), table.Columns[2].DataType);
+
+            Assert.Equal(100, table.Columns[1].MaxLength);
+
+            Assert.Equal("data", table.Rows[2][1]);
+            Assert.Equal(4, table.Rows.Count);
         }
     }
 }
