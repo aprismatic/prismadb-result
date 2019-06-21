@@ -19,7 +19,7 @@ test_script:
   - ps: Switch-DockerLinux
   - dotnet test .\ResultTests\ResultTests.csproj --no-build
 configuration: Release
-image: "Visual Studio 2017"
+image: "Windows Server 2019"
 nuget:
   disable_publish_on_pr: true
 cache:
@@ -27,4 +27,4 @@ cache:
 environment:
   AppVeyorAPIToken:
     secure: GvygCCndEp8eiXvItooIyglWYnyfUvg4YNyaufw3N3A=
-version: "0.2.0.{build}"
+version: "0.2.1.{build}"
