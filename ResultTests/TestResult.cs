@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using PrismaDB.Result;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,11 +9,19 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ResultTests
 {
     public class TestResult
     {
+        private readonly ITestOutputHelper output;
+
+        public TestResult(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
         [Fact(DisplayName = "ResultTable Serialization")]
         public void TestResultTableSerialization()
         {
@@ -24,7 +33,7 @@ namespace ResultTests
             row1.Add(new object[] { 1, "abc", "DEF" });
             table.Rows.Add(row1);
             var row2 = table.NewRow();
-            row2.Add(new object[] { 2, null, "xyz" });
+            row2.Add(new object[] { 2, DBNull.Value, "xyz" });
             table.Rows.Add(row2);
 
             string xmlRes;
@@ -48,6 +57,9 @@ namespace ResultTests
 
             Assert.NotNull(xmlRes);
             Assert.NotNull(jsonRes);
+
+            output.WriteLine(xmlRes);
+            output.WriteLine(jsonRes);
         }
 
         [Fact(DisplayName = "ResultReader Async")]
