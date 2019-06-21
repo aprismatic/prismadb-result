@@ -1,8 +1,13 @@
-﻿namespace PrismaDB.Result
+﻿using System.Runtime.Serialization;
+
+namespace PrismaDB.Result
 {
+    [DataContract]
     public class ResultNonQueryResponse : ResultResponse
     {
+        [DataMember]
         public long LastInsertId { get; set; }
+        [DataMember]
         public int Warnings { get; set; }
         public CommandTag Tag { get; set; }
 

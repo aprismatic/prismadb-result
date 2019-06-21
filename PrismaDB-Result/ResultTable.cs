@@ -1,18 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace PrismaDB.Result
 {
+    [DataContract]
     public class ResultTable : ResultQueryResponse
     {
         protected List<ResultRow> _rows;
 
-        [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
 
-        [XmlIgnore]
+        [DataMember]
         public List<ResultRow> Rows => _rows;
 
         public ResultTable() : this("") { }

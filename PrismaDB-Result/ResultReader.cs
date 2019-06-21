@@ -3,18 +3,18 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
 
 namespace PrismaDB.Result
 {
+    [DataContract]
     public class ResultReader : ResultQueryResponse, IDataReader, IDisposable
     {
         protected BlockingCollection<ResultRow> _rows;
         private bool _disposed = false;
         protected Exception _exception;
 
-        [XmlIgnore]
         internal override IEnumerable<ResultRow> rows => _rows;
 
         public int FieldCount => CurrentRow.Count;

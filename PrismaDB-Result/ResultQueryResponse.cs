@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Xml.Serialization;
+using System.Runtime.Serialization;
 
 namespace PrismaDB.Result
 {
+    [DataContract]
     public abstract class ResultQueryResponse : ResultResponse
     {
+        [DataMember]
         public ResultColumnList Columns { get; protected set; }
 
-        [XmlIgnore]
         internal abstract IEnumerable<ResultRow> rows { get; }
 
+        [DataMember]
         public string TableName { get; set; }
 
         public ResultQueryResponse() : this("") { }

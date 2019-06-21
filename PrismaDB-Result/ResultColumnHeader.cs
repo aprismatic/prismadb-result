@@ -1,19 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Xml.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace PrismaDB.Result
 {
+    [DataContract]
     public class ResultColumnHeader
     {
+        [DataMember]
         public string ColumnName { get; set; }
 
-        [JsonIgnore]
-        [XmlIgnore]
+        [DataMember]
         public int? MaxLength { get; set; }
 
-        [JsonIgnore]
-        [XmlIgnore]
         public Type DataType { get; set; }
 
         public ResultColumnHeader() : this("") { }

@@ -2,13 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace PrismaDB.Result
 {
+    [DataContract]
     public class ResultColumnList : IEnumerable<ResultColumnHeader>
     {
         protected ResultQueryResponse _table;
 
+        [DataMember]
         public List<ResultColumnHeader> Headers { get; protected set; }
 
         protected ResultColumnList() { }

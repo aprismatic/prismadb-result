@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -37,23 +37,22 @@ namespace ResultTests
             table.Rows.Add(row2);
 
             string xmlRes;
-            using (var stream = new StringWriter())
+            using (var memStm = new MemoryStream())
             {
-                var namespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
-                var serializer = new XmlSerializer(table.GetType());
-                var settings = new XmlWriterSettings
-                {
-                    Indent = true,
-                    OmitXmlDeclaration = true
-                };
-                using (var writer = XmlWriter.Create(stream, settings))
-                {
-                    serializer.Serialize(writer, table, namespaces);
-                    xmlRes = stream.ToString();
-                }
+                var types = new List<Type> { typeof(DBNull) };
+                var serializer = new DataContractSerializer(typeof(ResultTable), types);
+                var settings = new XmlWriterSettings { Indent = true };
+
+                using (var w = XmlWriter.Create(memStm, settings))
+                    serializer.WriteObject(w, table);
+
+                memStm.Seek(0, SeekOrigin.Begin);
+
+                using (var streamReader = new StreamReader(memStm))
+                    xmlRes = streamReader.ReadToEnd();
             }
 
-            var jsonRes = JsonConvert.SerializeObject(table);
+            var jsonRes = JsonConvert.SerializeObject(table, Newtonsoft.Json.Formatting.Indented);
 
             Assert.NotNull(xmlRes);
             Assert.NotNull(jsonRes);
