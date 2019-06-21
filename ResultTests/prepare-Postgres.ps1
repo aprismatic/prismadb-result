@@ -7,6 +7,8 @@ param(
 
 & "$PSScriptRoot\kill-Postgres.ps1" $ContainerName
 
+& docker pull postgres:latest
+
 & docker $dockerHost run -d -p ${Port}:5432 -e POSTGRES_PASSWORD=Password12! --name $ContainerName postgres:latest
 
 if (!$?)

@@ -12,7 +12,7 @@ namespace PrismaDB.Result
 
         internal override IEnumerable<ResultRow> rows => _rows;
 
-        [DataMember]
+        [DataMember(Order = 2)]
         public List<ResultRow> Rows => _rows;
 
         public ResultTable() : this("") { }

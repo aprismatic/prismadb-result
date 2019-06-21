@@ -7,12 +7,12 @@ namespace PrismaDB.Result
     [DataContract]
     public abstract class ResultQueryResponse : ResultResponse
     {
-        [DataMember]
+        [DataMember(Order = 1)]
         public ResultColumnList Columns { get; protected set; }
 
         internal abstract IEnumerable<ResultRow> rows { get; }
 
-        [DataMember]
+        [DataMember(Order = 0)]
         public string TableName { get; set; }
 
         public ResultQueryResponse() : this("") { }
