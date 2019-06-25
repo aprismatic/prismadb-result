@@ -57,6 +57,7 @@ namespace ResultTests
             Assert.NotNull(xmlRes);
             Assert.NotNull(jsonRes);
 
+            output.WriteLine(table.ToString());
             output.WriteLine(xmlRes);
             output.WriteLine(jsonRes);
         }
