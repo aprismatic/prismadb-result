@@ -1,18 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaDB-Result", "PrismaDB-Result\PrismaDB-Result.csproj", "{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3303BAA0-773E-4F5D-B699-F3CA3CD5BBB4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{574D9D80-FA53-4FF9-8542-0DFAA71BE2E1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9993F7DE-AFDC-4D82-A030-C3C5E373CE77}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ci", "ci", "{9336DBF6-976F-4D04-A6E4-7E301C68A9B3}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\release-dotnet-nuget.yml = .github\workflows\release-dotnet-nuget.yml
+		.github\workflows\test-dotnet-windows.yml = .github\workflows\test-dotnet-windows.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2955983D-FEC3-4C34-8890-DD89658479E9}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
+		Directory.Build.props = Directory.Build.props
+		nuget.config = nuget.config
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResultTests", "ResultTests\ResultTests.csproj", "{BB203AA0-D731-4406-9B13-70B2DE4FB89C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrismaDB.Result", "src\PrismaDB.Result\PrismaDB.Result.csproj", "{96163FD6-F219-4F1B-BCF6-AACEE0773C0B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResultTests", "test\ResultTests\ResultTests.csproj", "{A9CD72E7-1C88-4D7C-9B82-757A25295399}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,19 +32,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EACF586D-CF0C-4C49-8D9D-7B52C2A0511C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB203AA0-D731-4406-9B13-70B2DE4FB89C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96163FD6-F219-4F1B-BCF6-AACEE0773C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96163FD6-F219-4F1B-BCF6-AACEE0773C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96163FD6-F219-4F1B-BCF6-AACEE0773C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96163FD6-F219-4F1B-BCF6-AACEE0773C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CD72E7-1C88-4D7C-9B82-757A25295399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CD72E7-1C88-4D7C-9B82-757A25295399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CD72E7-1C88-4D7C-9B82-757A25295399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CD72E7-1C88-4D7C-9B82-757A25295399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{96163FD6-F219-4F1B-BCF6-AACEE0773C0B} = {3303BAA0-773E-4F5D-B699-F3CA3CD5BBB4}
+		{A9CD72E7-1C88-4D7C-9B82-757A25295399} = {9993F7DE-AFDC-4D82-A030-C3C5E373CE77}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {60B27EEC-5A0F-4517-8597-613CBA592E7E}
+		SolutionGuid = {575666A0-07A3-4BB3-95A8-281FA6583CE7}
 	EndGlobalSection
 EndGlobal
