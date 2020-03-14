@@ -7,9 +7,9 @@ param(
 
 & "$PSScriptRoot\kill-MySQL.ps1" $ContainerName
 
-& docker pull mysql:latest
+& docker pull mysql:5.7
 
-& docker $dockerHost run -d -p ${Port}:3306 -e MYSQL_ROOT_PASSWORD=Password12! --name $ContainerName mysql:latest
+& docker $dockerHost run -d -p ${Port}:3306 -e MYSQL_ROOT_PASSWORD=Password12! --name $ContainerName mysql:5.7
 
 if (!$?)
 {

@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -14,10 +14,10 @@ jobs:
       uses: nuget/setup-nuget@v1
     - name: Update nuget source
       run: |
-        nuget sources update -Name 'github' `
-                             -Source https://nuget.pkg.github.com/aprismatic/index.json `
-                             -UserName ${{ secrets.GithubUsername }} `
-                             -Password ${{ secrets.GithubToken }} `
+        nuget sources update -Name 'github' \
+                             -Source https://nuget.pkg.github.com/aprismatic/index.json \
+                             -UserName ${{ secrets.GithubUsername }} \
+                             -Password ${{ secrets.GithubToken }} \
                              -ConfigFile ./nuget.config
     - name: Restore packages
       run: nuget restore

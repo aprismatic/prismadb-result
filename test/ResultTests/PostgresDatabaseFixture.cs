@@ -15,11 +15,15 @@ namespace ResultTests
         public PostgresDatabaseFixture()
         {
             {
+                var shell = "powershell";
+                if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTION")))
+                    shell = "pwsh";
+
                 var proc = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = "powershell",
+                        FileName = shell,
                         Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"./prepare-Postgres.ps1\" -ContainerName \"{ContainerName}\" -Port {port}",
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
@@ -79,11 +83,15 @@ namespace ResultTests
         {
             DbConn.Dispose();
 
+            var shell = "powershell";
+            if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GITHUB_ACTION")))
+                shell = "pwsh";
+
             var proc = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "powershell",
+                    FileName = shell,
                     Arguments = $"-NoProfile -ExecutionPolicy Bypass -File \"./kill-Postgres.ps1\" \"{ContainerName}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
